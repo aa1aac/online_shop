@@ -13,6 +13,7 @@ export const UserState = makeVar({
   firstName: null,
   lastName: null,
   verified: null,
+  token: localStorage.getItem("token"),
 });
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
   );
 }
 
-const ME_QUERY = gql`
+export const ME_QUERY = gql`
   query {
     me {
       id

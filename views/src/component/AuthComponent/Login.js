@@ -5,7 +5,7 @@ import { useState } from "react";
 import styles from "./Login.module.scss";
 import { UserState } from "../../App";
 
-const Login = () => {
+const Login = ({ setIsLogin }) => {
   const [serverErrors, setErrors] = useState("");
 
   const [login, { loading }] = useMutation(LOGIN_MUTATION);
@@ -91,7 +91,10 @@ const Login = () => {
         </button>
         <div className="mt-4">
           Don't have an account?{" "}
-          <button className="btn btn-outline-secondary d-block">
+          <button
+            className="btn btn-outline-secondary d-block"
+            onClick={() => setIsLogin(false)}
+          >
             {" "}
             Signup{" "}
           </button>

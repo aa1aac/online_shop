@@ -99,7 +99,7 @@ GRAPHQL_AUTH = {
         'first_name',
         'last_name',
         'email',
-        # 'username'
+        'username'
     ]
 }
 

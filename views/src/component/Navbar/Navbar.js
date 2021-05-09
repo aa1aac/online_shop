@@ -17,7 +17,7 @@ const NavigationBar = () => {
       <Navbar.Collapse id="responsive-navbar-nav">
         {userState ? (
           <Nav>
-            {userState.id ? (
+            {userState.firstName ? (
               <div className="">
                 {" "}
                 Hi {userState.firstName} {userState.lastName} !

@@ -10,7 +10,7 @@ const NonPrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        userState.id ? <Redirect to="/" /> : <Component {...props} />
+        userState.firstName ? <Redirect to="/" /> : <Component {...props} />
       }
     />
   );

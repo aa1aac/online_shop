@@ -8,3 +8,4 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     is_seller = models.BooleanField(default=False)
+    UNIQUE_FIELDS = ['email']
