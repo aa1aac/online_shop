@@ -2,6 +2,8 @@ import graphene
 from graphql_auth.schema import MeQuery
 from graphql_auth import mutations
 
+import store.schema
+
 
 class AuthMutation(graphene.ObjectType):
     register = mutations.Register.Field()
@@ -19,11 +21,11 @@ class AuthMutation(graphene.ObjectType):
     swap_emails = mutations.SwapEmails.Field()
 
 
-class Query(MeQuery, graphene.ObjectType):
+class Query(MeQuery, store.schema.Query, graphene.ObjectType):
     pass
 
 
-class Mutation(AuthMutation, graphene.ObjectType):
+class Mutation(AuthMutation, store.schema.Mutation, graphene.ObjectType):
     pass
 
 

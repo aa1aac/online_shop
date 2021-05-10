@@ -114,6 +114,7 @@ const LOGIN_MUTATION = gql`
         firstName
         verified
         lastName
+        isSeller
       }
       token
     }

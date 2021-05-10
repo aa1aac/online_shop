@@ -51,7 +51,8 @@ INSTALLED_APPS = [
 
 
     # local
-    'users'
+    'users',
+    'store'
 ]
 
 
@@ -93,13 +94,14 @@ AUTHENTICATION_BACKENDS = [
 GRAPHQL_AUTH = {
     'LOGIN_ALLOWED_FIELDS': ['email'],
     "EMAIL_TEMPLATE_VARIABLES": {
-        "frontend_domain": "the-frontend.com"
+        "frontend_domain": "http://localhost:3000/#/"
     },
     'REGISTER_MUTATION_FIELDS': [
         'first_name',
         'last_name',
         'email',
-        'username'
+        'username',
+        'isSeller',
     ]
 }
 
