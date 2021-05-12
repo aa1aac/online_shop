@@ -8,7 +8,7 @@ class Item(models.Model):
     item_name = models.CharField(max_length=255)
     price = models.FloatField()
     description = models.TextField()
-    images = [models.URLField()]
+    images = models.JSONField()
     seller = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     cover_image = models.URLField()

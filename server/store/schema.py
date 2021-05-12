@@ -1,9 +1,9 @@
 import graphene
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
-from graphene_file_upload.scalars import Upload
 from .models import Item
-from graphql_jwt.decorators import user_passes_test
+from graphql_jwt.decorators import user_passes_test, login_required
+from django.db.models import Q
 
 
 class ItemType(DjangoObjectType):
@@ -47,15 +47,16 @@ class UploadItem(graphene.Mutation):
 
     class Arguments:
         item_name = graphene.String(required=True)
-        price = graphene.Int(required=True)
+        price = graphene.Float(required=True)
         description = graphene.String(required=True)
         images = graphene.List(graphene.String, required=True)
         coverImage = graphene.String(required=True)
 
-    @user_passes_test(lambda user: user.is_seller)
+    @user_passes_test(lambda user: user.isSeller)
+    @login_required
     def mutate(self, info,  item_name, price, description, images, coverImage):
         item = Item(item_name=item_name, price=price,
-                    description=description, images=images, cover_image=coverImage)
+                    description=description, images=images, cover_image=coverImage, seller_id=info.context.user.id)
 
         item.save()
         return UploadItem(success=True)

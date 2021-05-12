@@ -1,11 +1,75 @@
 import { useForm } from "react-hook-form";
+import { gql, useMutation } from "@apollo/client";
+import { useState } from "react";
 
 const AddItem = () => {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState, setValue } = useForm();
+  const [addItem, { error }] = useMutation(ADD_ITEM_MUTATION);
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(true);
 
-  const uploadItem = (formData) => {
-    console.log(formData);
+  const uploadImage = async (URL, file) => {
+    const URLS = [];
+
+    for (let i = 0; i < file.length; i++) {
+      const data = new FormData();
+      data.append("file", file[i]);
+      data.append("resource_type", "raw");
+      data.append("upload_preset", "default-preset");
+      data.append("cloud_name", "ingo");
+      let res = await fetch(URL, {
+        method: "post",
+        mode: "cors",
+        body: data,
+      });
+
+      let json = await res.json();
+      let { secure_url } = await json;
+      URLS.push(secure_url);
+    }
+
+    return URLS;
   };
+
+  const uploadItem = async (formData) => {
+    try {
+      setLoading(true);
+      setDone(false);
+      const URL = "https://api.cloudinary.com/v1_1/ingo/upload";
+      // upload images
+      let imagesURL = await uploadImage(URL, formData.images);
+      // upload cover_image
+      let coverImageURL = await uploadImage(URL, formData.coverImage);
+      let res = await addItem({
+        variables: {
+          ...formData,
+          images: imagesURL,
+          coverImage: coverImageURL[0],
+        },
+      });
+
+      console.log(res.data.uploadItem);
+
+      if (res.data?.uploadItem?.success) {
+        setDone(true);
+
+        setValue("itemName", "");
+        setValue("description", "");
+        setValue("images", "");
+        setValue("price", 0);
+        setValue("coverImage", "");
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+
+      setLoading(false);
+    }
+  };
+
+  console.log(error);
+
   return (
     <div className="container">
       <h2 className="text-center"> Add item </h2>
@@ -108,6 +172,7 @@ const AddItem = () => {
                 Images
               </label>
               <input
+                multiple
                 type="file"
                 className={
                   formState.errors.images
@@ -115,7 +180,6 @@ const AddItem = () => {
                     : "form-control"
                 }
                 id="Images"
-                multiple
                 {...register("images", {
                   required: {
                     value: true,
@@ -184,7 +248,25 @@ const AddItem = () => {
               ) : null}
             </div>
 
-            <button type="submit" className="btn btn-primary">
+            {error ? (
+              <div className="alert alert-danger">
+                {" "}
+                Unable to upload the item{" "}
+              </div>
+            ) : null}
+
+            {done ? (
+              <div className="alert alert-success">
+                {" "}
+                Item successfully uploaded{" "}
+              </div>
+            ) : null}
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
+            >
               Submit
             </button>
           </form>
@@ -193,5 +275,25 @@ const AddItem = () => {
     </div>
   );
 };
+
+const ADD_ITEM_MUTATION = gql`
+  mutation (
+    $coverImage: String!
+    $description: String!
+    $images: [String]!
+    $itemName: String!
+    $price: Float!
+  ) {
+    uploadItem(
+      coverImage: $coverImage
+      description: $description
+      images: $images
+      itemName: $itemName
+      price: $price
+    ) {
+      success
+    }
+  }
+`;
 
 export default AddItem;
