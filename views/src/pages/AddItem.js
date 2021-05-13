@@ -6,7 +6,7 @@ const AddItem = () => {
   const { register, handleSubmit, formState, setValue } = useForm();
   const [addItem, { error }] = useMutation(ADD_ITEM_MUTATION);
   const [loading, setLoading] = useState(false);
-  const [done, setDone] = useState(true);
+  const [done, setDone] = useState(false);
 
   const uploadImage = async (URL, file) => {
     const URLS = [];
