@@ -30,6 +30,11 @@ class Query(graphene.ObjectType):
                 Q(description__icontains=search))
 
             items = Item.objects.filter(filter)
+        elif myItems:
+            filter = (
+                Q(seller=info.context.user))
+
+            items = Item.objects.filter(filter)
         else:
             items = Item.objects.all()
 

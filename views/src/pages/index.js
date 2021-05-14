@@ -30,15 +30,16 @@ export default function Home() {
   );
 }
 
-const GET_ITEMS_MUTATION = gql`
-  query ($first: Int, $skip: Int, $search: String) {
-    items(first: $first, skip: $skip, search: $search) {
+export const GET_ITEMS_MUTATION = gql`
+  query ($first: Int, $skip: Int, $search: String, $myItems: Boolean) {
+    items(first: $first, skip: $skip, search: $search, myItems: $myItems) {
       id
       images
       itemName
       price
       coverImage
       description
+      images
     }
   }
 `;

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import ItemInfo from "./ItemInfo";
 
-export default function Items({
-  data: { itemName, coverImage, description, price },
-}) {
+export default function Items({ data }) {
+  const [show, setShow] = useState(false);
+  const { itemName, coverImage, price } = data;
   return (
     <div className="col">
       <div
@@ -23,14 +24,18 @@ export default function Items({
         />
         <div className="card-body">
           <h2> {itemName} </h2>
-          {/* <p className="card-text">{description}</p> */}
 
           <p>
             {" "}
             <b> $ {price} </b>{" "}
           </p>
 
-          <button className="btn btn-secondary"> View Item </button>
+          <button className="btn btn-secondary" onClick={() => setShow(true)}>
+            {" "}
+            View Item{" "}
+          </button>
+
+          <ItemInfo show={show} setShow={setShow} data={data} />
         </div>
       </div>
     </div>
