@@ -14,10 +14,13 @@ const NavigationBar = () => {
       verified: null,
       token: null,
       firstName: null,
+      cartSet: [],
     });
   };
 
   const userState = useReactiveVar(UserState);
+
+  console.log(userState);
 
   return (
     <Navbar collapseOnSelect expand="lg" className={styles.navigation}>
@@ -44,13 +47,15 @@ const NavigationBar = () => {
               </NavDropdown>
             </Nav>
 
-            <Nav>
-              {userState.isSeller ? (
-                <Link className="nav-link" to="/dashboard">
-                  {" "}
-                  Dashboard{" "}
-                </Link>
-              ) : null}
+            <Nav className="ml-auto">
+              <a className="nav-link">
+                Cart{" "}
+                <span className="badge badge-secondary">
+                  {userState.cartSet.length
+                    ? userState.cartSet[0].cartitemSet.length
+                    : "0"}
+                </span>
+              </a>
             </Nav>
           </>
         ) : (

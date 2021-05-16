@@ -25,6 +25,10 @@ const Login = ({ setIsLogin }) => {
       setErrors(tokenAuth.errors.nonFieldErrors[0].message);
     }
 
+    if (!tokenAuth.success) {
+      setErrors("please enter valid credentials");
+    }
+
     if (!tokenAuth.errors && !loading) {
       localStorage.setItem("token", `JWT ${tokenAuth.token}`);
 
@@ -105,18 +109,24 @@ const Login = ({ setIsLogin }) => {
 };
 
 const LOGIN_MUTATION = gql`
-  mutation($email: String!, $password: String!) {
+  mutation ($email: String!, $password: String!) {
     tokenAuth(email: $email, password: $password) {
-      errors
+      token
+
       success
       user {
-        id
         firstName
-        verified
         lastName
-        isSeller
+        id
+        email
+        cartSet {
+          cartitemSet {
+            item {
+              itemName
+            }
+          }
+        }
       }
-      token
     }
   }
 `;

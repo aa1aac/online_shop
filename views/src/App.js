@@ -8,7 +8,6 @@ import NonPrivateRoute from "./util/NonPrivateRoute";
 import SellerOnlyRoute from "./util/SellerOnlyRoute";
 
 import "./styles/global.scss";
-import Dashboard from "./pages/Dashboard";
 import AddItem from "./pages/AddItem";
 
 export const UserState = makeVar({
@@ -17,7 +16,7 @@ export const UserState = makeVar({
   lastName: null,
   verified: null,
   token: localStorage.getItem("token"),
-  isSeller: null,
+  cartSet: [],
 });
 
 function App() {
@@ -36,7 +35,7 @@ function App() {
         <Switch>
           <NonPrivateRoute exact path="/auth" component={Auth} />
 
-          <SellerOnlyRoute exact path="/dashboard" component={Dashboard} />
+          {/* <SellerOnlyRoute exact path="/dashboard" component={Dashboard} /> */}
           <SellerOnlyRoute exact path="/add-item" component={AddItem} />
 
           <Route path="/" exact component={Index} />
@@ -52,8 +51,15 @@ export const ME_QUERY = gql`
       id
       firstName
       lastName
-      verified
-      isSeller
+      cartSet {
+        cartitemSet {
+          item {
+            itemName
+            id
+            price
+          }
+        }
+      }
     }
   }
 `;

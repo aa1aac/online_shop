@@ -40,7 +40,7 @@ const Signup = ({ setIsLogin }) => {
     if (!loading && !register.errors) {
       localStorage.setItem("token", `JWT ${register.token}`);
 
-      UserState({ ...formData, verified: false });
+      UserState({ ...formData, cartSet: [] });
     }
   };
 
@@ -166,18 +166,6 @@ const Signup = ({ setIsLogin }) => {
           ) : null}
         </div>
 
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="isSeller"
-            {...register("isSeller")}
-          />
-          <label className="form-check-label" for="isSeller">
-            I want to sell my items
-          </label>
-        </div>
-
         <button type="submit" className="btn btn-secondary d-block">
           Signup
         </button>
@@ -197,13 +185,12 @@ const Signup = ({ setIsLogin }) => {
 };
 
 const SIGNUP_MUTATION = gql`
-  mutation(
+  mutation (
     $email: String!
     $password1: String!
     $password2: String!
     $firstName: String!
     $lastName: String!
-    $isSeller: String!
   ) {
     register(
       email: $email
@@ -212,7 +199,6 @@ const SIGNUP_MUTATION = gql`
       firstName: $firstName
       lastName: $lastName
       username: $email
-      isSeller: $isSeller
     ) {
       success
       errors

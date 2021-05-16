@@ -1,11 +1,31 @@
+import { gql, useMutation } from "@apollo/client";
 import { Modal, Carousel } from "react-bootstrap";
+import { UserState } from "../../App";
 
 function ItemInfo({
   show,
   setShow,
-  data: { itemName, coverImage, price, description, images },
+  data: { itemName, coverImage, price, description, images, id },
 }) {
   images = JSON.parse(images);
+
+  const [addToCart, { loading, error, called }] = useMutation(
+    ADD_TO_CART_MUTATION,
+    {
+      variables: { itemId: id },
+      onCompleted: (data) => {
+        console.log(data);
+        UserState({
+          ...UserState(),
+          cartSet: [{ cartitemSet: data.addToCart.cart.cartitemSet }],
+        });
+
+        console.log(data.addToCart.cart.cartItemSet);
+      },
+    }
+  );
+
+  console.log();
   return (
     <>
       <Modal
@@ -54,11 +74,45 @@ function ItemInfo({
 
           <b className="d-block mb-1">Price: $ {price} </b>
 
-          <button className=" btn btn-primary"> Add to Cart </button>
+          <button
+            className=" btn btn-primary"
+            onClick={addToCart}
+            disabled={loading}
+          >
+            {" "}
+            Add to Cart{" "}
+          </button>
+
+          {error ? (
+            <div className="alert alert-danger mt-3"> {error.message} </div>
+          ) : null}
+
+          {!loading && called && !error ? (
+            <div className="alert alert-success mt-3">
+              {" "}
+              Item added to the cart{" "}
+            </div>
+          ) : null}
         </Modal.Body>
       </Modal>
     </>
   );
 }
+
+const ADD_TO_CART_MUTATION = gql`
+  mutation ($itemId: String!) {
+    addToCart(id: $itemId) {
+      cart {
+        cartitemSet {
+          item {
+            itemName
+            id
+            price
+          }
+        }
+      }
+    }
+  }
+`;
 
 export default ItemInfo;

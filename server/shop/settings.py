@@ -101,12 +101,10 @@ GRAPHQL_AUTH = {
         'last_name',
         'email',
         'username',
-        'isSeller',
     ]
 }
 
 GRAPHQL_JWT = {
-    "JWT_VERIFY_EXPIRATION": True,
     "JWT_ALLOW_ANY_CLASSES": [
         "graphql_auth.mutations.Register",
         "graphql_auth.mutations.VerifyAccount",
@@ -117,7 +115,6 @@ GRAPHQL_JWT = {
         "graphql_auth.mutations.VerifyToken",
         "graphql_auth.mutations.VerifySecondaryEmail",
     ],
-
 }
 
 

@@ -8,7 +8,7 @@ export default function Home() {
 
   const [getItems, { loading, data }] = useLazyQuery(GET_ITEMS_MUTATION, {
     variables: {
-      first: 8,
+      first: 5,
       skip,
       search,
     },
@@ -31,8 +31,8 @@ export default function Home() {
 }
 
 export const GET_ITEMS_MUTATION = gql`
-  query ($first: Int, $skip: Int, $search: String, $myItems: Boolean) {
-    items(first: $first, skip: $skip, search: $search, myItems: $myItems) {
+  query ($first: Int, $skip: Int, $search: String) {
+    items(first: $first, skip: $skip, search: $search) {
       id
       images
       itemName

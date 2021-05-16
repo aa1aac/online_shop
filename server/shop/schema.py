@@ -1,8 +1,8 @@
 import graphene
-from graphql_auth.schema import MeQuery
 from graphql_auth import mutations
 
 import store.schema
+import users.schema
 
 
 class AuthMutation(graphene.ObjectType):
@@ -21,7 +21,7 @@ class AuthMutation(graphene.ObjectType):
     swap_emails = mutations.SwapEmails.Field()
 
 
-class Query(MeQuery, store.schema.Query, graphene.ObjectType):
+class Query(users.schema.Query, store.schema.Query, graphene.ObjectType):
     pass
 
 

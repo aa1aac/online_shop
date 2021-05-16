@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ItemInfo from "./ItemInfo";
 
-export default function Items({ data }) {
+export default function Items({ data, ismyItems }) {
   const [show, setShow] = useState(false);
   const { itemName, coverImage, price } = data;
   return (
@@ -35,7 +35,12 @@ export default function Items({ data }) {
             View Item{" "}
           </button>
 
-          <ItemInfo show={show} setShow={setShow} data={data} />
+          <ItemInfo
+            show={show}
+            setShow={setShow}
+            data={data}
+            ismyItems={ismyItems}
+          />
         </div>
       </div>
     </div>

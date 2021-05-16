@@ -1,15 +1,11 @@
 import { Link } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { useEffect } from "react";
 
-import { GET_ITEMS_MUTATION } from "./index";
 import Items from "../component/Items/Items";
 
 const Dashboard = () => {
-  const [getItems, { data, loading }] = useLazyQuery(GET_ITEMS_MUTATION, {
-    myItems: true,
-    fetchPolicy: "network-only",
-  });
+  const [getItems, { data, loading }] = useLazyQuery(GET_MY_ITEMS, {});
 
   useEffect(() => {
     getItems();
@@ -25,10 +21,26 @@ const Dashboard = () => {
       </Link>
 
       <div className="row">
-        {data ? data.items.map((item) => <Items data={item} />) : null}
+        {data
+          ? data.myItems.map((item) => <Items data={item} isMyItem />)
+          : null}
       </div>
     </div>
   );
 };
+
+const GET_MY_ITEMS = gql`
+  query ($first: Int, $skip: Int, $search: String) {
+    myItems(first: $first, skip: $skip, search: $search) {
+      id
+      itemName
+      price
+      description
+      images
+      createdOn
+      coverImage
+    }
+  }
+`;
 
 export default Dashboard;
