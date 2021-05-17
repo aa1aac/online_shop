@@ -15,17 +15,16 @@ function ItemInfo({
       variables: { itemId: id },
       onCompleted: (data) => {
         console.log(data);
-        UserState({
-          ...UserState(),
-          cartSet: [{ cartitemSet: data.addToCart.cart.cartitemSet }],
-        });
+        // UserState({
+        //   ...UserState(),
+        //   cartSet: [{ cartitemSet: data.addToCart.cart.cartitemSet }],
+        // });
 
         console.log(data.addToCart.cart.cartItemSet);
       },
     }
   );
 
-  console.log();
   return (
     <>
       <Modal
@@ -103,7 +102,9 @@ const ADD_TO_CART_MUTATION = gql`
   mutation ($itemId: String!) {
     addToCart(id: $itemId) {
       cart {
+        id
         cartitemSet {
+          id
           item {
             itemName
             id

@@ -20,8 +20,6 @@ const NavigationBar = () => {
 
   const userState = useReactiveVar(UserState);
 
-  console.log(userState);
-
   return (
     <Navbar collapseOnSelect expand="lg" className={styles.navigation}>
       <Link className="navbar-brand" to="/">

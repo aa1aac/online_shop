@@ -52,7 +52,9 @@ export const ME_QUERY = gql`
       firstName
       lastName
       cartSet {
+        id
         cartitemSet {
+          id
           item {
             itemName
             id
