@@ -1,0 +1,57 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+$xsmall: 12px;
+$small: 18px;
+$medium: 28px;
+$large: 32px;
+$xlarge: 48px;
+
+$gray: hsl(120, 7%, 50%);
+$light-gray: hsl(120, 7%, 90%);
+$dark-gray: hsl(120, 7%, 20%);
+
+$primary-500: hsl(240, 60%, 49%);
+$primary-100: hsl(240, 79%, 80%);
+$primary-300: hsl(240, 79%, 60%);
+$primary-700: hsl(240, 79%, 35%);
+$primary-1000: hsl(240, 70%, 25%);
+
+$white: hsl(0, 18%, 93%);
+$danger: hsl(0, 67%, 52%);
+$success: hsl(120, 63%, 44%);
+$info: hsl(60, 74%, 62%);
+
+* {
+  box-sizing: border-box;
+}
+
+// body {
+//   background-color: $light-gray;
+// }
+
+.navigation-bar {
+  display: flex;
+  padding: $medium;
+  background-color: $primary-700;
+  color: $white;
+  font-size: $small;
+  font-weight: $xlarge;
+  justify-content: space-between;
+
+  .brand {
+    color: $white;
+    font-weight: bold;
+  }
+
+  .brand:hover {
+    text-decoration: none;
+  }
+
+  .nav {
+  }
+}
+
+.button {
+  outline: none;
+  background-color: $white;
+}

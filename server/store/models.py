@@ -20,6 +20,7 @@ class Item(models.Model):
 class Cart(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     belongsTo = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    total = models.FloatField(null=False, default=0.0)
 
 
 class CartItem(models.Model):

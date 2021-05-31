@@ -1,0 +1,19 @@
+.card {
+  @apply border-2 shadow-sm p-3 mx-auto hover:shadow-lg rounded-lg;
+}
+
+.input {
+  @apply shadow rounded-xl w-full py-2 px-3 text-gray-700  focus:outline-none  focus:border-blue-300 focus:ring;
+}
+
+.label {
+  @apply block text-gray-700 text-sm font-bold mb-2;
+}
+
+.btn {
+  @apply outline-none  py-1 rounded-3xl px-5 focus:outline-none;
+}
+
+.error {
+  @apply bg-red-200 text-red-700 p-1  mt-2 rounded-3xl  text-sm text-center;
+}

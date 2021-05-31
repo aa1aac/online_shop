@@ -19,22 +19,21 @@ class CartType(DjangoObjectType):
 class CartItemType(DjangoObjectType):
     class Meta:
         model = CartItem
-        exclude_fields = ('sold', 'cart')
+        exclude_fields = ('sold', 'cart', )
 
 
 class Query(graphene.ObjectType):
     items = graphene.List(ItemType, first=graphene.Int(),
                           skip=graphene.Int(), search=graphene.String())
 
-    # my_items = graphene.List(ItemType, first=graphene.Int(),
-    #                          skip=graphene.Int(), search=graphene.String())
-
-    # cart = graphene.Field(CartType,)
+    cart = graphene.Field(CartType,)
 
     @login_required
     def resolve_cart(self, info):
         try:
-            cart = Cart.objects.get(belongsTo=info.context.user)
+            cart = Cart.objects.filter(cartitem__sold=False).distinct().get(
+                belongsTo=info.context.user)
+
             return cart
         except Cart.DoesNotExist:
             cart = Cart(belongsTo=info.context.user)
@@ -57,26 +56,6 @@ class Query(graphene.ObjectType):
             items = items[:first]
 
         return items
-
-    # @user_passes_test(lambda user: user.isSeller)
-    # def resolve_my_items(self, info, skip=None, first=None, search=None):
-    #     if search:
-    #         filter = (
-    #             Q(item_name__icontains=search),
-    #             Q(description__icontains=search),
-    #             Q(seller=info.context.user))
-
-    #         items = Item.objects.filter(filter)
-    #     else:
-    #         items = Item.objects.filter(seller=info.context.user)
-
-    #     if skip:
-    #         items = items[skip:]
-
-    #     if first:
-    #         items = items[:first]
-
-    #     return items
 
 
 class UploadItem(graphene.Mutation):
@@ -115,9 +94,12 @@ class AddToCart(graphene.Mutation):
                 return GraphQLError('the item already exists in your cart')
 
             except CartItem.DoesNotExist:
+                item = Item.objects.get(id=id)
                 cartItem = CartItem(
-                    cart=cart, item=Item.objects.get(id=id))
+                    cart=cart, item=item)
                 cartItem.save()
+                cart.total += item.price
+                cart.save()
 
         except Cart.DoesNotExist:
             cart = Cart(belongsTo=info.context.user)
@@ -129,12 +111,33 @@ class AddToCart(graphene.Mutation):
                     return GraphQLError('the item already exists in your cart')
 
             except CartItem.DoesNotExist:
-                cartItem = CartItem(cart=cart, item=Item.objects.get(id=id))
+                item = Item.objects.get(id=id)
+                cartItem = CartItem(cart=cart, item=item)
                 cartItem.save()
+                cart.total += item.price
+                cart.save()
 
         return AddToCart(cart=cart)
 
 
+class DeleteCartItem(graphene.Mutation):
+    cart = graphene.Field(CartType)
+
+    class Arguments:
+        id = graphene.String(required=True)
+
+    @login_required
+    def mutate(self, info, id):
+        cart = Cart.objects.get(belongsTo=info.context.user)
+        item = CartItem.objects.get(id=id, cart=cart)
+        cart.total = cart.total - item.item.price
+
+        item.delete()
+        cart.save()
+
+        return DeleteCartItem(cart=cart)
+
+
 class Mutation(graphene.ObjectType):
-    # upload_item = UploadItem.Field()
     add_to_cart = AddToCart.Field()
+    delete_cart_item = DeleteCartItem.Field()

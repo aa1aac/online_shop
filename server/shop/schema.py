@@ -3,6 +3,7 @@ from graphql_auth import mutations
 
 import store.schema
 import users.schema
+import payment.schema
 
 
 class AuthMutation(graphene.ObjectType):
@@ -25,7 +26,7 @@ class Query(users.schema.Query, store.schema.Query, graphene.ObjectType):
     pass
 
 
-class Mutation(AuthMutation, store.schema.Mutation, graphene.ObjectType):
+class Mutation(AuthMutation, payment.schema.Mutation, store.schema.Mutation, graphene.ObjectType):
     pass
 
 
