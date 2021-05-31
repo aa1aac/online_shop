@@ -1,12 +1,23 @@
 import Head from "next/head";
 import Navbar from "./Navbar";
-import { useReactiveVar } from "@apollo/client";
+import { useLazyQuery, useReactiveVar, gql } from "@apollo/client";
 import UserState from "../state/UserState";
 import { useRouter } from "next/router";
+
+import { useEffect } from "react";
 
 const Layout = ({ title = "Pasal", children, isNotPrivate, isPrivate }) => {
   const userState = useReactiveVar(UserState);
   const router = useRouter();
+  const [meQuery] = useLazyQuery(ME_QUERY, {
+    onCompleted: (data) => {
+      UserState(data.me);
+    },
+  });
+
+  useEffect(() => {
+    meQuery();
+  }, []);
 
   if (isNotPrivate) {
     if (userState.firstName) {
@@ -28,11 +39,35 @@ const Layout = ({ title = "Pasal", children, isNotPrivate, isPrivate }) => {
         <title> {title} </title>
       </Head>
 
-      <Navbar />
+      <Navbar user={userState} />
 
       {children}
     </div>
   );
 };
+
+export const ME_QUERY = gql`
+  query {
+    me {
+      id
+      firstName
+      lastName
+      email
+      cartSet {
+        id
+        total
+        __typename
+        cartitemSet {
+          id
+          item {
+            id
+            itemName
+            price
+          }
+        }
+      }
+    }
+  }
+`;
 
 export default Layout;

@@ -43,7 +43,6 @@ const Signup = ({ setIsLogin }) => {
     }
   };
 
-  console.log(errors);
   return (
     <>
       <div className="flex justify-center mt-5">
@@ -59,7 +58,7 @@ const Signup = ({ setIsLogin }) => {
 
             <div className="mb-4 sm:flex sm:justify-between ">
               <div className="mb-4 sm:mr-3">
-                <label className="label" for="firstName">
+                <label className="label" htmlFor="firstName">
                   First Name
                 </label>
                 <input
@@ -85,7 +84,7 @@ const Signup = ({ setIsLogin }) => {
               </div>
 
               <div>
-                <label className="label" for="lastName">
+                <label className="label" htmlFor="lastName">
                   Last Name
                 </label>
                 <input
@@ -112,7 +111,7 @@ const Signup = ({ setIsLogin }) => {
             </div>
 
             <div className="mb-4 ">
-              <label className="label" for="email">
+              <label className="label" htmlFor="email">
                 Email
               </label>
               <input
@@ -138,7 +137,7 @@ const Signup = ({ setIsLogin }) => {
             </div>
 
             <div className="mb-6">
-              <label className="label" for="password">
+              <label className="label" htmlFor="password">
                 Password
               </label>
               <input
@@ -164,7 +163,7 @@ const Signup = ({ setIsLogin }) => {
             </div>
 
             <div className="mb-6">
-              <label className="label" for="password2">
+              <label className="label" htmlFor="password2">
                 Confirm Password
               </label>
               <input

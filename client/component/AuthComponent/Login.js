@@ -47,7 +47,7 @@ const Login = ({ setIsLogin }) => {
             Login{" "}
           </h2>
           <div className="mb-4">
-            <label className="label" for="email">
+            <label className="label" htmlFor="email">
               Email
             </label>
             <input
@@ -65,7 +65,7 @@ const Login = ({ setIsLogin }) => {
             />
           </div>
           <div className="mb-6">
-            <label className="label" for="password">
+            <label className="label" htmlFor="password">
               Password
             </label>
             <input
@@ -77,7 +77,9 @@ const Login = ({ setIsLogin }) => {
             />
           </div>
 
-          {serverErrors ? <div className="error"> {serverErrors} </div> : null}
+          {serverErrors ? (
+            <div className="error mb-3"> {serverErrors} </div>
+          ) : null}
 
           <div>
             <button
