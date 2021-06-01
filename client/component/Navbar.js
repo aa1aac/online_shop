@@ -29,7 +29,7 @@ const Navbar = ({ user }) => {
         </button>
       ) : null}
 
-      <div className="p-3 border-b-2 border-gray-50">
+      <div className="p-3 border-b-2 border-gray-100 mb-10">
         <nav className="flex justify-between items-center">
           <Link href="/" className="font-bold text-lg">
             <span className="uppercase font-extrabold cursor-pointer">
