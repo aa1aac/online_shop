@@ -1,7 +1,29 @@
 import { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
+
+import UserState from "../state/UserState";
 
 const Item = ({ item }) => {
   const [displayInfo, setDisplayInfo] = useState(false);
+
+  const [addToCart, { loading, error, called }] = useMutation(
+    ADD_TO_CART_MUTATION,
+    {
+      variables: { itemId: item.id },
+      onCompleted: (data) => {
+        console.log(data);
+        UserState({
+          ...UserState(),
+          cartSet: [
+            {
+              cartitemSet: data.addToCart.cart.cartitemSet,
+              total: data.addToCart.cart.total,
+            },
+          ],
+        });
+      },
+    }
+  );
 
   return (
     <>
@@ -51,20 +73,55 @@ const Item = ({ item }) => {
           <div className="grid grid-flow-col grid-cols-3 gap-4 mt-4 mx-3">
             {JSON.parse(item.images).map((src) => (
               <img
+                id={src}
                 src={src}
                 className="w-full max-h-38 h-38 object-cover rounded-xl"
                 alt="other images"
               />
             ))}
           </div>
+          {error ? <div className="error"> {error.message} </div> : null}
+          {!error && !loading && called ? (
+            <div className="success"> item added to the cart </div>
+          ) : null}
           <div className="flex justify-end items-center w-100 border-t p-3 mt-2">
             <button
               onClick={() => setDisplayInfo(false)}
-              className="bg-red-500 hover:bg-red-700 px-3 py-1 rounded text-white mr-1 close-modal"
+              className="inline-flex btn  hover:bg-red-500 px-3 py-1 rounded hover:text-white mr-1 close-modal"
             >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
               close
             </button>
-            <button className="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded text-white">
+            <button
+              disabled={loading}
+              onClick={addToCart}
+              className="inline-flex btn bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded text-white"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
               Add to cart
             </button>
           </div>
@@ -76,3 +133,22 @@ const Item = ({ item }) => {
 };
 
 export default Item;
+
+const ADD_TO_CART_MUTATION = gql`
+  mutation ($itemId: String!) {
+    addToCart(id: $itemId) {
+      cart {
+        id
+        total
+        cartitemSet {
+          id
+          item {
+            itemName
+            id
+            price
+          }
+        }
+      }
+    }
+  }
+`;

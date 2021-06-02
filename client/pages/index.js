@@ -16,8 +16,6 @@ export default function Home() {
     });
   }, []);
 
-  console.log(data.data);
-
   return (
     <Layout>
       <main className=" grid  md:grid-cols-3 gap-10 px-7">
