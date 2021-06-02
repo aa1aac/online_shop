@@ -29,7 +29,7 @@ const Navbar = ({ user }) => {
         </button>
       ) : null}
 
-      <div className="p-3 border-b-2 border-gray-100 mb-10">
+      <div className="p-3 border-b-2 border-gray-100 mb-10 ">
         <nav className="flex justify-between items-center">
           <Link href="/" className="font-bold text-lg">
             <span className="uppercase font-extrabold cursor-pointer">
@@ -51,6 +51,24 @@ const Navbar = ({ user }) => {
                       fillRule="nonzero"
                     />
                   </svg>
+
+                  <button className="btn text-gray-500 font-bold inline-flex">
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>{" "}
+                    Cart
+                  </button>
+
                   <button
                     onClick={(e) => {
                       setBtnFocus(!btnFocus);
@@ -73,9 +91,9 @@ const Navbar = ({ user }) => {
                       />
                     </svg>
                     {btnFocus ? (
-                      <div className="absolute z-10 top-6 left-0 right-0 bg-white w-40 pt-2 shadow-md rounded-lg overflow-hidden">
+                      <div className="absolute  z-10 top-6 left-0  bg-white w-39 pt-2 shadow-md rounded-lg ">
                         <div
-                          className="block p-1 text-gray-500 hover:bg-red-500 hover:text-gray-100"
+                          className="block py-3 px-6  text-gray-500 hover:bg-red-500 hover:text-gray-100 "
                           onClick={logout}
                         >
                           {" "}

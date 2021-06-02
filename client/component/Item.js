@@ -33,7 +33,7 @@ const Item = ({ item }) => {
       <div
         className={
           displayInfo
-            ? "h-full w-full absolute z-40  left-0 top-0 flex justify-center items-center bg-white bg-opacity-10"
+            ? " w-full absolute z-40  left-0 top-0 flex justify-center items-center bg-white bg-opacity-10"
             : "hidden"
         }
       >
@@ -44,12 +44,24 @@ const Item = ({ item }) => {
           <img
             src={item.coverImage}
             alt={item.itemName}
-            className="object-scale-down h-32 w-full"
+            className="object-scale-down shadow-sm h-48 w-full"
           />{" "}
           <div className="p-5 text-md font-semibold">{item.description}</div>
           <span className="btn bg-green-500 m-3"> $ {item.price} </span>
-          <div class="flex justify-end items-center w-100 border-t p-3 mt-2">
-            <button className="bg-red-500 hover:bg-red-700 px-3 py-1 rounded text-white mr-1 close-modal">
+          <div className="grid grid-flow-col grid-cols-3 gap-4 mt-4 mx-3">
+            {JSON.parse(item.images).map((src) => (
+              <img
+                src={src}
+                className="w-full max-h-38 h-38 object-cover rounded-xl"
+                alt="other images"
+              />
+            ))}
+          </div>
+          <div className="flex justify-end items-center w-100 border-t p-3 mt-2">
+            <button
+              onClick={() => setDisplayInfo(false)}
+              className="bg-red-500 hover:bg-red-700 px-3 py-1 rounded text-white mr-1 close-modal"
+            >
               close
             </button>
             <button className="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded text-white">
