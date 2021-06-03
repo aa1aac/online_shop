@@ -2,7 +2,7 @@ import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
 
-import { UserState } from "../../state/UserState";
+import UserState from "../../state/UserState";
 
 const Signup = ({ setIsLogin }) => {
   const [signup, { loading }] = useMutation(SIGNUP_MUTATION);

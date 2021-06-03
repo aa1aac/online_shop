@@ -7,7 +7,13 @@ import UserState from "../../state/UserState";
 const Login = ({ setIsLogin }) => {
   const [serverErrors, setErrors] = useState("");
 
-  const [login, { loading }] = useMutation(LOGIN_MUTATION);
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, {
+    onCompleted: ({ tokenAuth }) => {
+      localStorage.setItem("token", `JWT ${tokenAuth.token}`);
+
+      UserState({ ...tokenAuth.user });
+    },
+  });
 
   const {
     register,
@@ -26,12 +32,6 @@ const Login = ({ setIsLogin }) => {
 
     if (!tokenAuth.success) {
       setErrors("please enter valid credentials");
-    }
-
-    if (!tokenAuth.errors && !loading) {
-      localStorage.setItem("token", `JWT ${tokenAuth.token}`);
-
-      UserState({ ...tokenAuth.user });
     }
   };
 

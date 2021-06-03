@@ -19,19 +19,23 @@ const Layout = ({ title = "Pasal", children, isNotPrivate, isPrivate }) => {
     meQuery();
   }, []);
 
-  if (isNotPrivate) {
-    if (userState.firstName) {
-      router.replace("/");
-      return null;
+  useEffect(() => {
+    if (isNotPrivate) {
+      if (userState.firstName) {
+        router.replace("/");
+        return null;
+      }
     }
-  }
+  }, [userState.lastName]);
 
-  if (isPrivate) {
-    if (!userState.firstName) {
-      router.replace(`auth/?next=${router.pathname}`);
-      return null;
+  useEffect(() => {
+    if (isPrivate) {
+      if (!userState.firstName) {
+        router.replace(`/auth/?next=${router.pathname}`);
+        return null;
+      }
     }
-  }
+  }, [userState.lastName]);
 
   return (
     <div className="text-gray-600">
