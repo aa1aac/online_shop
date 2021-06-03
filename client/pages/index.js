@@ -1,38 +1,45 @@
 import Layout from "../component/Layout";
 import { gql, useLazyQuery, useReactiveVar } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import Item from "../component/Item";
 import Items from "../state/ItemsState";
 
 export default function Home() {
-  const items = useReactiveVar(Items);
-  const [fetchMoreBtn, setFetchMoreBtn] = useState(true);
+  const [skip, setSkip] = useState(0);
+  const [hasMoreItems, setHasMoreItems] = useState(true);
 
-  const [getItems, loading] = useLazyQuery(GET_ITEMS_QUERY, {
-    onCompleted: (data) => {
-      if (data.items.length === 0) {
-        setFetchMoreBtn(false);
-      }
-
-      Items({ ...items, data: [...items.data, ...data.items] });
-    },
-  });
+  const [getItems, { loading, data, fetchMore }] = useLazyQuery(
+    GET_ITEMS_QUERY,
+    {
+      onCompleted: (data) => {
+        setSkip(data.items.length + skip);
+      },
+    }
+  );
 
   useEffect(() => {
-    getItems({ variables: { first: 5 } });
+    getItems({
+      variables: {
+        first: 5,
+        skip,
+      },
+    });
   }, []);
 
-  const fetchMoreItems = () => {
-    getItems({ variables: { first: 5, skip: items.data.length } });
+  const fetchMoreItems = async () => {
+    await fetchMore({ variables: { first: 5, skip } });
+    setSkip(skip + data.items.length);
   };
 
   return (
     <Layout>
-      <main className=" grid  md:grid-cols-3 gap-10 px-7">
-        {items.data ? items.data.map((item) => <Item item={item} />) : null}
+      <main className="grid  md:grid-cols-3 gap-10 px-7">
+        {data && data.items
+          ? data.items.map((item) => <Item item={item} />)
+          : null}
       </main>
-      {items.data && fetchMoreBtn ? (
+      {hasMoreItems ? (
         <button
           onClick={fetchMoreItems}
           className="btn bg-blue-500 mt-4 mx-auto block mb-3 text-white hover:shadow-lg"

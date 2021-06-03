@@ -8,7 +8,6 @@ const cart = () => {
 
   const [deleteItem, { loading }] = useMutation(DELETE_CART_ITEM, {
     onCompleted: (data) => {
-      console.log(data);
       UserState({ ...userState, cartSet: [data.deleteCartItem.cart] });
     },
   });
